@@ -1,12 +1,22 @@
-import { test } from 'tap'
-import { build } from '../helper'
+import { FastifyInstance } from 'fastify';
+import { createServer } from '../helper'
 
-test('example is loaded', async (t) => {
-  const app = await build(t)
+describe('example is loaded', () => {
+  let server: FastifyInstance;
 
-  const res = await app.inject({
-    url: '/example'
+  beforeAll(async () => {
+    server = await createServer();
   })
 
-  t.equal(res.payload, 'this is an example')
+  afterAll(async () => {
+    server.close()
+  })
+  it('responds when hit', async () => {
+    const res = await server.inject({
+      url: '/example'
+    })
+  
+    expect(res.payload).toBe('this is an example');
+  });
+
 })

@@ -1,22 +1,37 @@
+
+import { FastifyReply } from 'fastify/types/reply';
+
 import ExampleService from '../services/example';
+import { RequestContext } from '../types';
+import Util from '../util';
+import BaseHandler from './base';
 
-export default class ExampleHandler {
+export default class ExampleHandler extends BaseHandler {
+  util: Util;
   exampleService: ExampleService;
-  services: any;
 
-  constructor({ exampleService }: { exampleService: ExampleService }) {
+  constructor({ exampleService, util }: { exampleService: ExampleService, util: Util }) {
+    super();
+
+    this.util = util;
     this.exampleService = exampleService;
-  };
+  }
 
-  async getAllPosts() {
-    const posts = await this.exampleService.findPosts();
-
-    return posts;
+  async getAllExamples() {
+    return await this.exampleService.findExamples()
   }
   
-  async createPost() {
-    const posts = await this.exampleService.createPost();
+  async createExample(context: RequestContext, reply: FastifyReply) {
+    try {
+      const { body } = context;
+  
+      return await this.exampleService.createExample(body);
+    } catch (err) {
+      if (!this.isHttpError(err)) throw err;
 
-    return posts;
+      const { statusCode, data } = this.util.formatErrorResponse(err);
+      
+      return reply.status(statusCode).send(data);
+    }
   }
-};
+}

@@ -1,21 +1,21 @@
-import ExampleRepository from '../repository/exampple';
+import HttpErrorFactory from '../errors/http-error-factory';
+import ExampleRepository from '../repositories/example'
 
 export default class ExampleService {
   exampleRepository: ExampleRepository;
+  httpError: HttpErrorFactory;
 
-  constructor({ exampleRepository }: { exampleRepository: ExampleRepository }) {
+  constructor({ exampleRepository, httpError }: { exampleRepository: ExampleRepository, httpError: HttpErrorFactory }) {
     this.exampleRepository = exampleRepository;
-  };
+    this.httpError = httpError;
+  }
 
-  async findPosts() {
-    const posts = await this.exampleRepository.getPosts();
-
-    return posts;
+  async findExamples() {
+    return await this.exampleRepository.getExamples();
   }
   
-  async createPost() {
-    const posts = await this.exampleRepository.createPost();
-
-    return posts;
+  async createExample(data: unknown) {
+    throw this.httpError.tooManyRequests('test');
+    return await this.exampleRepository.createExample(data);
   }
-};
+}

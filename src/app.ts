@@ -1,32 +1,37 @@
-import { join } from 'path';
-import AutoLoad, {AutoloadPluginOptions} from 'fastify-autoload';
 import { FastifyPluginAsync } from 'fastify';
+import AutoLoad, { AutoloadPluginOptions } from 'fastify-autoload';
+import { ConnectionOptions } from 'mongoose';
+import { join } from 'path';
 
 export type AppOptions = {
-  // Place your custom options for app below here.
+  db?: {
+    uri: string
+    options?: ConnectionOptions,
+  },
+  cache?: {
+    url: string,
+    reconnectTries?: number,
+    reconnectAfter?: number,
+    reconnectTimeout?: number,
+  }
 } & Partial<AutoloadPluginOptions>;
 
 const app: FastifyPluginAsync<AppOptions> = async (
-    fastify,
+    server,
     opts
 ): Promise<void> => {
-  // Place here your custom code!
-  
-  // Do not touch the following lines
-
-  // This loads all plugins defined in plugins
-  // those should be support plugins that are reused
-  // through your application
-  void fastify.register(AutoLoad, {
+  // Load all plugins defined in plugins
+  void server.register(AutoLoad, {
     dir: join(__dirname, 'plugins'),
-    options: opts
+    options: {
+      schemasDir: join(__dirname, 'schemas'),
+      ...opts,
+    }
   })
 
-  // This loads all plugins defined in routes
-  // define your routes in one of these
-  void fastify.register(AutoLoad, {
-    dir: join(__dirname, 'routes'),
-    options: opts
+  // Loads all plugins defined in routes
+  void server.register(AutoLoad, {
+    dir: join(__dirname, 'routes')
   })
 };
 
