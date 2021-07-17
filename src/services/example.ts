@@ -1,5 +1,5 @@
-import HttpErrorFactory from '../errors/http-error-factory';
-import ExampleRepository from '../repositories/example'
+import HttpErrorFactory from "../errors/http-error-factory";
+import ExampleRepository from "../repositories/example";
 
 export default class ExampleService {
   exampleRepository: ExampleRepository;
@@ -11,11 +11,11 @@ export default class ExampleService {
   }
 
   async findExamples() {
-    return await this.exampleRepository.getExamples();
+    return this.exampleRepository.getExamples();
   }
   
   async createExample(data: unknown) {
-    throw this.httpError.tooManyRequests('test');
-    return await this.exampleRepository.createExample(data);
+    throw this.httpError.tooManyRequests("test");
+    return this.exampleRepository.createExample(data);
   }
 }

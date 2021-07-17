@@ -1,20 +1,20 @@
 export default [
   {
-    $id: 'response/examples',
-    type: 'array',
+    $id: "response/examples",
+    type: "array",
     items: {
-      $ref: 'shared/example'
+      $ref: "shared/example"
     }
   },
   {
-    $id: 'response/oneExample',
-    type: 'object',
+    $id: "response/oneExample",
+    type: "object",
     properties: {
       author: {
-        type: 'string'
+        type: "string"
       },
       slug: {
-        type: 'string'
+        type: "string"
       }
     }
   },

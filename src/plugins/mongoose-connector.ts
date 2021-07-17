@@ -1,12 +1,12 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance } from "fastify";
 import FastifyPlugin from "fastify-plugin";
-import * as mongoose from 'mongoose';
-import { Connection, ConnectionOptions } from 'mongoose';
+import mongoose from "mongoose";
+import { Connection, ConnectionOptions } from "mongoose";
 
-import { AppOptions } from '../app';
-import { MongooseLoaderPluginOptions } from '../types';
+import { AppOptions } from "../app";
+import { MongooseLoaderPluginOptions } from "../types";
 
-declare module 'fastify' {
+declare module "fastify" {
   interface FastifyInstance {
     db: Connection
   }
@@ -15,8 +15,9 @@ declare module 'fastify' {
 const plugin = async (fastify: FastifyInstance, opts: AppOptions): Promise<void> => {
   if (!opts.db) return;
   
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
   const { uri, options } = opts.db!;
-  const logNamespace = `[Database]`;
+  const logNamespace = "[Database]";
   
   const DEFAULT_OPTIONS: ConnectionOptions = {
     autoIndex: false,
@@ -31,12 +32,13 @@ const plugin = async (fastify: FastifyInstance, opts: AppOptions): Promise<void>
 
     fastify.log.info(`${logNamespace} Connected!`);
     
-    mongoose.connection.on('disconnected', () => fastify.log.warn(`${logNamespace} Disconnected!`));
-    mongoose.connection.on('reconnected', () => fastify.log.info(`${logNamespace} Reconnected!`));
-    mongoose.connection.on('error', () => fastify.log.error(`${logNamespace} Error!`));
+    mongoose.connection.on("disconnected", () => fastify.log.warn(`${logNamespace} Disconnected!`));
+    mongoose.connection.on("reconnected", () => fastify.log.info(`${logNamespace} Reconnected!`));
+    mongoose.connection.on("error", () => fastify.log.error(`${logNamespace} Error!`));
     
-    fastify.addHook('onClose', () => mongoose.connection.close());
-  } catch (error) {
+    fastify.addHook("onClose", () => mongoose.connection.close());
+  }
+  catch (error) {
     fastify.log.error(`${logNamespace} Error: ${error}`);
   }
 };

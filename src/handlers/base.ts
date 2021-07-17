@@ -1,5 +1,5 @@
 
-import { HttpError } from 'http-errors';
+import { HttpError } from "http-errors";
 
 export default class BaseHandler {
   protected isHttpError(error: unknown): boolean {

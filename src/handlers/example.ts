@@ -1,10 +1,9 @@
+import { FastifyReply } from "fastify/types/reply";
 
-import { FastifyReply } from 'fastify/types/reply';
-
-import ExampleService from '../services/example';
-import { RequestContext } from '../types';
-import Util from '../util';
-import BaseHandler from './base';
+import ExampleService from "../services/example";
+import { RequestContext } from "../types";
+import Util from "../util";
+import BaseHandler from "./base";
 
 export default class ExampleHandler extends BaseHandler {
   util: Util;
@@ -18,15 +17,16 @@ export default class ExampleHandler extends BaseHandler {
   }
 
   async getAllExamples() {
-    return await this.exampleService.findExamples()
+    return this.exampleService.findExamples();
   }
   
   async createExample(context: RequestContext, reply: FastifyReply) {
     try {
       const { body } = context;
   
-      return await this.exampleService.createExample(body);
-    } catch (err) {
+      return this.exampleService.createExample(body);
+    }
+    catch (err) {
       if (!this.isHttpError(err)) throw err;
 
       const { statusCode, data } = this.util.formatErrorResponse(err);

@@ -1,13 +1,13 @@
 export default [
   {
-    $id: 'shared/example',
-    type: 'object',
+    $id: "shared/example",
+    type: "object",
     properties: {
       author: {
-        type: 'string'
+        type: "string"
       },
       slug: {
-        type: 'string'
+        type: "string"
       }
     },
     additionalProperties: false

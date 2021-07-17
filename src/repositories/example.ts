@@ -1,6 +1,6 @@
-import { Model } from 'mongoose';
+import { Model } from "mongoose";
 
-import Example from '../models/example';
+import Example from "../models/example";
 
 export default class ExampleRepository {
   exampleModel: Model<typeof Example>;
@@ -10,10 +10,10 @@ export default class ExampleRepository {
   }
 
   async getExamples() {
-    return await this.exampleModel.find();
+    return this.exampleModel.find().limit(5).lean() ;
   }
   
   async createExample(data: unknown) {
-    return await this.exampleModel.create(data);
+    return this.exampleModel.create(data);
   }
 }

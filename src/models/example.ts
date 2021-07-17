@@ -1,6 +1,6 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema } from "mongoose";
 
-import { iExample } from '../types';
+import { iExample } from "../types";
 
 const dataSchema = new Schema({
   title: {
@@ -37,10 +37,10 @@ const dataSchema = new Schema({
   },
 });
 
-dataSchema.pre('validate', function (this: iExample, next) {
-  this.slug = this.title.toLowerCase().replaceAll(' ', '-');
+dataSchema.pre("validate", function (this: iExample, next) {
+  this.slug = this.title.toLowerCase().replaceAll(" ", "-");
 
   next();
-})
+});
 
-export default () => model('example', dataSchema);
+export default () => model("example", dataSchema);

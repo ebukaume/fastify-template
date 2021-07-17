@@ -1,34 +1,35 @@
 import { FastifyInstance } from "fastify";
-import FastifyPlugin from 'fastify-plugin';
-import { readdirSync,statSync } from 'fs';
-import { join } from 'path';
+import FastifyPlugin from "fastify-plugin";
+import { readdirSync,statSync } from "fs";
+import { join } from "path";
 
-const namespace = '[SchemaLoaderPlugin]';
+const namespace = "[SchemaLoaderPlugin]";
 
 interface SchemaLoaderPluginOptions {
   schemasDir: string,
 }
 
 const walkDir = (dir: string, fileList: string[] = []): string[] => {
-	const topLevelDir: string[] = readdirSync(dir);
+  const topLevelDir: string[] = readdirSync(dir);
 
-	topLevelDir.forEach((file) => {
-		const joinedPath = join(dir, file);
-		const stat = statSync(joinedPath);
+  topLevelDir.forEach((file) => {
+    const joinedPath = join(dir, file);
+    const stat = statSync(joinedPath);
 
-		if (stat.isDirectory()) fileList = walkDir(joinedPath, fileList);
-		else if (joinedPath.endsWith('.js')) fileList.push(joinedPath);
-	});
+    if (stat.isDirectory()) fileList = walkDir(joinedPath, fileList);
+    else if (joinedPath.endsWith(".ts")) fileList.push(joinedPath);
+  });
 
-	return fileList;
-}
+  return fileList;
+};
 
 const loadSchema = (fastify: FastifyInstance, dir: string): void => {
   let fileLists;
 
   try {
     fileLists = walkDir(dir);
-  } catch(err) {
+  }
+  catch(err) {
     fastify.log.error(`${namespace} ${err.message}`);
 
     return;
@@ -43,13 +44,13 @@ const loadSchema = (fastify: FastifyInstance, dir: string): void => {
     /* eslint-disable @typescript-eslint/no-var-requires */
     const schemas: JSON[] = require(file).default;
     schemas.forEach(schema => fastify.addSchema(schema));
-  }, {});
+  });
 };
 
 const plugin = async (fastify: FastifyInstance, opt: SchemaLoaderPluginOptions): Promise<void> => {
   const { schemasDir } = opt;
 
-  if (typeof schemasDir !== 'string') {
+  if (typeof schemasDir !== "string") {
     throw new Error(`${namespace} expected path to be a string; got ${schemasDir} instead`);
   }
 

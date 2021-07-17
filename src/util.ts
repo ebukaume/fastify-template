@@ -17,4 +17,13 @@ export default class Util {
       },
     };
   }
+
+  deepType(value: unknown): string {
+    return Object
+      .prototype
+      .toString
+      .apply(value)
+      .slice(8, -1)
+      .toLowerCase();
+  }
 }

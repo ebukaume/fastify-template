@@ -1,7 +1,7 @@
-import { FastifyPluginAsync } from 'fastify';
-import AutoLoad, { AutoloadPluginOptions } from 'fastify-autoload';
-import { ConnectionOptions } from 'mongoose';
-import { join } from 'path';
+import { FastifyPluginAsync } from "fastify";
+import AutoLoad, { AutoloadPluginOptions } from "fastify-autoload";
+import { ConnectionOptions } from "mongoose";
+import { join } from "path";
 
 export type AppOptions = {
   db?: {
@@ -17,23 +17,23 @@ export type AppOptions = {
 } & Partial<AutoloadPluginOptions>;
 
 const app: FastifyPluginAsync<AppOptions> = async (
-    server,
-    opts
+  server,
+  opts
 ): Promise<void> => {
   // Load all plugins defined in plugins
   void server.register(AutoLoad, {
-    dir: join(__dirname, 'plugins'),
+    dir: join(__dirname, "plugins"),
     options: {
-      schemasDir: join(__dirname, 'schemas'),
+      schemasDir: join(__dirname, "schemas"),
       ...opts,
     }
-  })
+  });
 
-  // Loads all plugins defined in routes
+  // Loads all the routes (routes are defined as plugins)
   void server.register(AutoLoad, {
-    dir: join(__dirname, 'routes')
-  })
+    dir: join(__dirname, "routes")
+  });
 };
 
 export default app;
-export { app }
+export { app };
