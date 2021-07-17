@@ -15,6 +15,7 @@ const example: FastifyPluginAsync = async (fastify: FastifyInstance): Promise<vo
     url: "/",
     method: "POST",
     schema: {
+      description: "Creates an example resource ",
       body: fastify.getSchema("request/examples"),
       response: {
         "2xx": fastify.getSchema("response/oneExample")

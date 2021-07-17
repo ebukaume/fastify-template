@@ -2,4 +2,4 @@
 
 ## To Do
 1. Using in-memory mongodb for testing
-2. Automatic documentation generation using swagger
+2. Automatic documentation generation using swagger __**Done**__
