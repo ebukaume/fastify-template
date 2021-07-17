@@ -1,22 +1,27 @@
-import { FastifyInstance } from 'fastify';
-import { createServer } from '../helper'
+import { FastifyInstance } from "fastify";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
-describe('example is loaded', () => {
+import { createDatabase, createServer } from "../helper";
+
+describe("example is loaded", () => {
   let server: FastifyInstance;
+  let database: MongoMemoryServer;
 
   beforeAll(async () => {
-    server = await createServer();
-  })
+    database = await createDatabase();
+    server = await createServer(database.getUri());
+  });
 
   afterAll(async () => {
-    server.close()
-  })
-  it('responds when hit', async () => {
+    await server.close();
+    await database.stop();
+  });
+  it("responds when hit", async () => {
     const res = await server.inject({
-      url: '/'
-    })
+      url: "/"
+    });
   
     expect(JSON.parse(res.payload)).toEqual({ root: true });
   });
 
-})
+});

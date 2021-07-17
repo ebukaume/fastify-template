@@ -1,29 +1,34 @@
-import { FastifyInstance } from 'fastify';
-import { createServer } from '../helper'
-import Util from "../../src/util"
+import { FastifyInstance } from "fastify";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
-describe('example resources', () => {
+import Util from "../../src/util";
+import { createDatabase,createServer } from "../helper";
+
+describe("example resources", () => {
   let server: FastifyInstance;
+  let database: MongoMemoryServer;
   let util: Util;
 
   beforeAll(async () => {
-    server = await createServer();
+    database = await createDatabase();
+    server = await createServer(database.getUri());
     util = new Util();
-  })
+  });
 
   afterAll(async () => {
-    server.close()
-  })
-  describe('GET /', () => {
-    it('returns the list of examples', async () => {
+    await server.close();
+    await database.stop();
+  });
+  describe("GET /", () => {
+    it("returns the list of examples", async () => {
       const { statusCode, payload } = await server.inject({
-        url: '/example'
+        url: "/example"
       });
 
       const examples = JSON.parse(payload);
 
       expect(statusCode).toBe(200);
-      expect(util.deepType(examples)).toBe('array')
+      expect(util.deepType(examples)).toBe("array");
     });
   });
-})
+});

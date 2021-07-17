@@ -11,7 +11,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest -c jest.config.ts",
+    "test": "jest -c jest.config.ts --coverage",
     "start": "ts-node src/index.ts --transpile-only",
     "dev": "nodemon",
     "lint": "eslint .",
@@ -31,10 +31,10 @@
     "dotenv": "~10.0.0",
     "fastify": "~3.18.1",
     "fastify-autoload": "~3.8.0",
-    "fastify-cors": "^6.0.2",
+    "fastify-cors": "~6.0.2",
     "fastify-plugin": "~3.0.0",
     "fastify-sensible": "~3.1.0",
-    "fastify-swagger": "^4.8.3",
+    "fastify-swagger": "~4.8.3",
     "mongoose": "~5.13.2",
     "redis": "~3.1.2"
   },
@@ -53,11 +53,12 @@
     "fastify-tsconfig": "~1.0.1",
     "husky": "~7.0.0",
     "jest": "~27.0.6",
-    "lint-staged": "^11.0.1",
-    "nodemon": "^2.0.12",
+    "lint-staged": "~11.0.1",
+    "mongodb-memory-server": "~7.2.1",
+    "nodemon": "~2.0.12",
     "pino-pretty": "~5.1.0",
     "ts-jest": "~27.0.3",
-    "ts-node": "^10.1.0",
+    "ts-node": "~10.1.0",
     "typescript": "~4.3.5"
   }
 }

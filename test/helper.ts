@@ -1,6 +1,8 @@
 // This file contains code that we reuse between our tests.
-import Fastify from 'fastify'
-import App from '../src/app'
+import Fastify, { FastifyInstance } from "fastify";
+import { MongoMemoryServer } from "mongodb-memory-server";
+
+import App from "../src/app";
 
 // Fill in this config with all the configurations
 // needed for testing the application
@@ -9,13 +11,13 @@ async function config () {
 }
 
 // Automatically build and tear down our instance
-async function createServer () {
+async function createServer (uri: string): Promise<FastifyInstance> {
   const server = Fastify();
 
   // Register application as a normal plugin
   void server.register(App, {
-    db: { uri: 'mongodb://localhost:27017/test' },
-    cache: { url: '' }
+    db: { uri },
+    cache: { url: "" }
   });
 
   await server.ready();
@@ -23,7 +25,15 @@ async function createServer () {
   return server;
 }
 
+const createDatabase = async (): Promise<MongoMemoryServer> => {
+  // Extend the default timeout so MongoDB binaries can download
+  jest.setTimeout(60000);
+
+  return MongoMemoryServer.create();
+};
+
 export {
   config,
-  createServer
-}
+  createDatabase,
+  createServer,
+};
