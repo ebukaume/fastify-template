@@ -1,1 +1,1 @@
-# A microservice template using Fastidy and TypeScript
+# A microservice template using Fastify and TypeScript
